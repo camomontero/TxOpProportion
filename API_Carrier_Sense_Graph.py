@@ -16,8 +16,9 @@ class Vertex:
     """Represents the Node itself and its characteristics.
     
     This class is used by the class Graph in order to carry out 
-    the calculations. This class should not be used by the user. 
-    
+    the calculations. Methods of this class should be invoked only
+    through the methods of the class Graph. This class and its methods 
+    should not be invoked directly by the user. 
     """
 
     def __init__(self, node):
@@ -63,45 +64,68 @@ class Graph:
         
         Initialization variables
         ------------------------
-        vert_dict: type=dictionary
-        num_vertices: type=integer
+        vert_dict: dictionary
+        num_vertices: integer
         """
+        
         self.vert_dict = {}
         self.num_vertices = 0
     
     def __iter__(self):
+        """ Returns an iterator.
+        
+        Description
+        -----------
+        It iterates through each value of the dict vert_dict.
+        Each value is a class Vertex instance.
+        It is called with a for loop: 
+        
+        Example
+        ------- 
+        for i in self:
+        """
+        
         return iter(self.vert_dict.values())
-
+        
     def add_vertex(self, node):
         """Creates a vertex in the Graph.
         
         Parameters
         ----------
-        
         node: string 
             vertex to add to the Graph
         
+        Description
+        -----------
+        It builds the dict "vert_dict"
+        Example: {'node': class_Vertex_instance}
+        
         Returns
         --------
-        Vertex object
-        
+        A class Vertex instance
+            This is the value of the pair element in the dict "vert_dict"
         """
+        
         self.num_vertices = self.num_vertices + 1
         new_vertex = Vertex(node)
         self.vert_dict[node] = new_vertex
         return new_vertex
 
     def get_vertex(self, n):
-        """ Returns the vertex as a Vertex object.
-        
-        If the vertex was already created.
-        Otherwise it returns None. <API_Carrier_Sense_Graph.Vertex instance>
+        """ Recover the vertex if it was already created.
+        Otherwise it returns None.
         
         Parameters
         ----------
         n: string 
             vertex of the Carrier Sense Graph.
+        
+        Returns
+        --------
+        A class Vertex instance
+            This is the value of the pair element in the dict "vert_dict"
         """
+        
         if n in self.vert_dict:
             return self.vert_dict[n]
         else:
@@ -115,20 +139,18 @@ class Graph:
         
         Parameters
         ----------
-        
         frm: string 
-            first vertex of the edge
-            
+            first vertex of the edge    
         to: string 
             second vertex of the edge
-            
         cost: dictionary
             no. of flows of first and second vertex.
         
         Example:
         --------
-        'A', 'B', {'A': 2, 'B': 3}
+        'A', 'B', {'A': 1, 'B': 3}
         """
+        
         if frm not in self.vert_dict:
             self.add_vertex(frm)
         if to not in self.vert_dict:
@@ -137,8 +159,7 @@ class Graph:
         self.vert_dict[to].add_neighbor(frm, cost)
     
     def calc_txop_prop(self):
-        """
-        Return the airtime utilization proportion. 
+        """ Return the airtime utilization proportion per node. 
         
         Return
         ------
@@ -150,6 +171,7 @@ class Graph:
         --------
         {'A': 0.25, 'B': 0.75}
         """
+        
         txop_prop = {}
         for v in self:
             sum_flows = v.proportion_calculator()
