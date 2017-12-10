@@ -178,12 +178,41 @@ class Graph:
             txop_prop[v.get_id()] = sum_flows
         return txop_prop
  
+    def calc_txop_value(self, max_txop, dict_p):
+        """ Return the airtime utilization value per node. 
+        
+        Parameters
+        ----------
+        max_txop: integer 
+            represents the maximum allowed TxOp value in us (8160us)    
+        dict_p: dictionary 
+            airtime utilization proportion per node.
+        
+        Return
+        ------
+        txop_values: dictionary 
+            Contains each node as the key and the txop_value
+            as the value.
+        
+        Example:
+        --------
+        {'A': 2016.0, 'B': 6112.0}
+        """
+        
+        txop_values = {}
+        for key, value in dict_p.items():
+            temp = max_txop*value
+            txop_val = temp - (temp % 32)
+            txop_values[key] = txop_val
+        return txop_values
+        
+        
 if __name__ == '__main__':
     """Different scenarios are set here as an example
        of how to use correctly the methods that the API
        provide.
     """   
-    
+    max_txop=8160
     ######################################################
     #                 SCENARIO BALANCED 1                #             
     ######################################################
@@ -195,7 +224,10 @@ if __name__ == '__main__':
     
     print "Scenario Balanced 1: A--B"
     print "TxOp proportion:"
-    print bal1.calc_txop_prop()
+    p1 = bal1.calc_txop_prop()
+    print p1
+    print "TxOp values:"
+    print bal1.calc_txop_value(max_txop, p1)
     print '\n'
     
     bal1G=nx.Graph()
@@ -222,7 +254,10 @@ if __name__ == '__main__':
     
     print "Scenario Balanced 2: A--B, B--C, A--C"
     print "TxOp proportion:"
-    print bal2.calc_txop_prop()
+    p2 = bal2.calc_txop_prop()
+    print p2
+    print "TxOp values:"
+    print bal2.calc_txop_value(max_txop, p2)
     print '\n'
     
     bal2G=nx.Graph()
@@ -255,7 +290,10 @@ if __name__ == '__main__':
     
     print "Scenario Balanced 3: A--B, A--C, A--D, B--C, B--D, C--D"
     print "TxOp proportion:"
-    print bal3.calc_txop_prop()
+    p3 = bal3.calc_txop_prop()
+    print p3
+    print "TxOp values:"
+    print bal3.calc_txop_value(max_txop, p3)
     print '\n'
     
     bal3G=nx.Graph()
@@ -284,7 +322,10 @@ if __name__ == '__main__':
         
     print "Scenario Starvation 1: A--B--C"
     print "TxOp proportion:"
-    print starv1.calc_txop_prop()
+    p4 = starv1.calc_txop_prop()
+    print p4
+    print "TxOp values:"
+    print starv1.calc_txop_value(max_txop, p4)
     print '\n'
     
     starv1G=nx.Graph()
@@ -314,7 +355,10 @@ if __name__ == '__main__':
         
     print "Scenario Starvation 2: A--B, A--C, B--C, C--D"
     print "TxOp proportion:"
-    print starv2.calc_txop_prop()
+    p5 = starv2.calc_txop_prop()
+    print p5
+    print "TxOp values:"
+    print starv2.calc_txop_value(max_txop, p5)
     print '\n'
     
     starv2G=nx.Graph()
@@ -349,7 +393,10 @@ if __name__ == '__main__':
         
     print "Scenario Starvation 3: A--B, A--D, A--E, B--C, B--D, C--D, D--E"
     print "TxOp proportion:"
-    print starv3.calc_txop_prop()
+    p6 = starv3.calc_txop_prop()
+    print p6
+    print "TxOp values:"
+    print starv3.calc_txop_value(max_txop, p6)
     print '\n'
     
     starv3G=nx.Graph()
@@ -377,7 +424,10 @@ if __name__ == '__main__':
     
     print "Scenario Backaul 1: Adhoc--Access"
     print "TxOp proportion:"
-    print back1.calc_txop_prop()
+    p7 = back1.calc_txop_prop()
+    print p7
+    print "TxOp values:"
+    print back1.calc_txop_value(max_txop, p7)
     print '\n'
     
     back1G=nx.Graph()
@@ -401,7 +451,10 @@ if __name__ == '__main__':
     
     print "Scenario Backhaul 2: Adhoc--Access"
     print "TxOp proportion:"
-    print back2.calc_txop_prop()
+    p8 = back2.calc_txop_prop()
+    print p8
+    print "TxOp values:"
+    print back2.calc_txop_value(max_txop, p8)
     print '\n'
     
     back2G=nx.Graph()
